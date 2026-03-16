@@ -1,0 +1,140 @@
+class StudentNode {
+    int roll;
+    String name;
+    int age;
+    String grade;
+    StudentNode next;
+
+    StudentNode(int r, String n, int a, String g) {
+        roll = r;
+        name = n;
+        age = a;
+        grade = g;
+        next = null;
+    }
+}
+
+class StudentLinkedList {
+
+    StudentNode head = null;
+
+    void insertBeginning(int r, String n, int a, String g) {
+        StudentNode newNode = new StudentNode(r,n,a,g);
+        newNode.next = head;
+        head = newNode;
+    }
+
+    void insertEnd(int r, String n, int a, String g) {
+        StudentNode newNode = new StudentNode(r,n,a,g);
+
+        if(head == null) {
+            head = newNode;
+            return;
+        }
+
+        StudentNode temp = head;
+
+        while(temp.next != null) {
+            temp = temp.next;
+        }
+
+        temp.next = newNode;
+    }
+
+    void deleteStudent(int roll) {
+
+        if(head == null)
+            return;
+
+        if(head.roll == roll) {
+            head = head.next;
+            return;
+        }
+
+        StudentNode temp = head;
+
+        while(temp.next != null && temp.next.roll != roll) {
+            temp = temp.next;
+        }
+
+        if(temp.next != null) {
+            temp.next = temp.next.next;
+        }
+    }
+
+    void searchStudent(int roll) {
+
+        StudentNode temp = head;
+
+        while(temp != null) {
+
+            if(temp.roll == roll) {
+                System.out.println("Student Found:");
+                System.out.println(temp.roll+" "+temp.name+" "+temp.age+" "+temp.grade);
+                return;
+            }
+
+            temp = temp.next;
+        }
+
+        System.out.println("Student not found");
+    }
+
+    void updateGrade(int roll, String newGrade) {
+
+        StudentNode temp = head;
+
+        while(temp != null) {
+
+            if(temp.roll == roll) {
+                temp.grade = newGrade;
+                System.out.println("Grade Updated");
+                return;
+            }
+
+            temp = temp.next;
+        }
+
+        System.out.println("Student not found");
+    }
+
+    void display() {
+
+        StudentNode temp = head;
+
+        while(temp != null) {
+            System.out.println(temp.roll+" "+temp.name+" "+temp.age+" "+temp.grade);
+            temp = temp.next;
+        }
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        StudentLinkedList list = new StudentLinkedList();
+
+        list.insertBeginning(101,"Rahul",20,"A");
+        list.insertEnd(102,"Priya",21,"B");
+        list.insertEnd(103,"Aman",19,"A");
+
+        System.out.println("Student Records:");
+        list.display();
+
+        System.out.println("\nSearching roll 102");
+        list.searchStudent(102);
+
+        System.out.println("\nUpdating grade");
+        list.updateGrade(102,"A+");
+
+        System.out.println("\nAfter update:");
+        list.display();
+
+        System.out.println("\nDeleting roll 101");
+        list.deleteStudent(101);
+
+        System.out.println("\nAfter deletion:");
+        list.display();
+    }
+}

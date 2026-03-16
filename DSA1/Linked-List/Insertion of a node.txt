@@ -1,0 +1,79 @@
+class Node {
+    int data;
+    Node next;
+
+    Node(int d) {
+        data = d;
+        next = null;
+    }
+}
+
+public class Main {
+
+    static Node head = null;
+
+    static void insertBeginning(int data) {
+
+        Node newNode = new Node(data);
+        newNode.next = head;
+        head = newNode;
+    }
+
+    static void insertEnd(int data) {
+
+        Node newNode = new Node(data);
+
+        if(head == null) {
+            head = newNode;
+            return;
+        }
+
+        Node temp = head;
+
+        while(temp.next != null) {
+            temp = temp.next;
+        }
+
+        temp.next = newNode;
+    }
+
+    static void insertPosition(int data,int pos) {
+
+        Node newNode = new Node(data);
+
+        if(pos == 1) {
+            newNode.next = head;
+            head = newNode;
+            return;
+        }
+
+        Node temp = head;
+
+        for(int i=1;i<pos-1;i++) {
+            temp = temp.next;
+        }
+
+        newNode.next = temp.next;
+        temp.next = newNode;
+    }
+
+    static void display() {
+
+        Node temp = head;
+
+        while(temp != null) {
+            System.out.print(temp.data + " ");
+            temp = temp.next;
+        }
+    }
+
+    public static void main(String[] args) {
+
+        insertBeginning(10);
+        insertEnd(20);
+        insertEnd(30);
+        insertPosition(25,3);
+
+        display();
+    }
+}

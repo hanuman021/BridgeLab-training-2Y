@@ -1,0 +1,191 @@
+class TaskNode {
+    int id;
+    String name;
+    String priority;
+    String dueDate;
+    TaskNode next;
+
+    TaskNode(int i,String n,String p,String d) {
+        id = i;
+        name = n;
+        priority = p;
+        dueDate = d;
+        next = null;
+    }
+}
+
+class TaskList {
+
+    TaskNode head = null;
+    TaskNode current = null;
+
+    void insertBeginning(int i,String n,String p,String d) {
+
+        TaskNode newNode = new TaskNode(i,n,p,d);
+
+        if(head == null) {
+            head = newNode;
+            newNode.next = head;
+            current = head;
+            return;
+        }
+
+        TaskNode temp = head;
+
+        while(temp.next != head) {
+            temp = temp.next;
+        }
+
+        newNode.next = head;
+        temp.next = newNode;
+        head = newNode;
+    }
+
+    void insertEnd(int i,String n,String p,String d) {
+
+        TaskNode newNode = new TaskNode(i,n,p,d);
+
+        if(head == null) {
+            head = newNode;
+            newNode.next = head;
+            current = head;
+            return;
+        }
+
+        TaskNode temp = head;
+
+        while(temp.next != head) {
+            temp = temp.next;
+        }
+
+        temp.next = newNode;
+        newNode.next = head;
+    }
+
+    void insertPosition(int i,String n,String p,String d,int pos) {
+
+        if(pos == 1) {
+            insertBeginning(i,n,p,d);
+            return;
+        }
+
+        TaskNode newNode = new TaskNode(i,n,p,d);
+        TaskNode temp = head;
+
+        for(int j=1;j<pos-1 && temp.next!=head;j++) {
+            temp = temp.next;
+        }
+
+        newNode.next = temp.next;
+        temp.next = newNode;
+    }
+
+    void deleteTask(int id) {
+
+        if(head == null)
+            return;
+
+        if(head.id == id && head.next == head) {
+            head = null;
+            return;
+        }
+
+        TaskNode temp = head;
+        TaskNode prev = null;
+
+        do {
+
+            if(temp.id == id) {
+
+                if(temp == head) {
+
+                    TaskNode last = head;
+
+                    while(last.next != head) {
+                        last = last.next;
+                    }
+
+                    head = head.next;
+                    last.next = head;
+                    return;
+                }
+
+                prev.next = temp.next;
+                return;
+            }
+
+            prev = temp;
+            temp = temp.next;
+
+        } while(temp != head);
+    }
+
+    void nextTask() {
+
+        if(current != null) {
+            System.out.println(current.id+" "+current.name+" "+current.priority+" "+current.dueDate);
+            current = current.next;
+        }
+    }
+
+    void display() {
+
+        if(head == null)
+            return;
+
+        TaskNode temp = head;
+
+        do {
+            System.out.println(temp.id+" "+temp.name+" "+temp.priority+" "+temp.dueDate);
+            temp = temp.next;
+        } while(temp != head);
+    }
+
+    void searchPriority(String p) {
+
+        if(head == null)
+            return;
+
+        TaskNode temp = head;
+
+        do {
+
+            if(temp.priority.equals(p)) {
+                System.out.println(temp.id+" "+temp.name+" "+temp.priority+" "+temp.dueDate);
+            }
+
+            temp = temp.next;
+
+        } while(temp != head);
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        TaskList list = new TaskList();
+
+        list.insertBeginning(1,"Design UI","High","20 June");
+        list.insertEnd(2,"Database Setup","Medium","22 June");
+        list.insertEnd(3,"API Integration","High","25 June");
+
+        System.out.println("All Tasks");
+        list.display();
+
+        System.out.println("\nNext Task");
+        list.nextTask();
+
+        System.out.println("\nNext Task");
+        list.nextTask();
+
+        System.out.println("\nSearch High Priority");
+        list.searchPriority("High");
+
+        System.out.println("\nDelete Task 2");
+        list.deleteTask(2);
+
+        System.out.println("\nAfter Deletion");
+        list.display();
+    }
+}

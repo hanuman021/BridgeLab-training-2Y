@@ -1,0 +1,207 @@
+class MovieNode {
+    String title;
+    String director;
+    int year;
+    double rating;
+    MovieNode next;
+    MovieNode prev;
+
+    MovieNode(String t, String d, int y, double r) {
+        title = t;
+        director = d;
+        year = y;
+        rating = r;
+        next = null;
+        prev = null;
+    }
+}
+
+class MovieList {
+
+    MovieNode head = null;
+    MovieNode tail = null;
+
+    void insertBeginning(String t,String d,int y,double r) {
+
+        MovieNode newNode = new MovieNode(t,d,y,r);
+
+        if(head == null) {
+            head = tail = newNode;
+            return;
+        }
+
+        newNode.next = head;
+        head.prev = newNode;
+        head = newNode;
+    }
+
+    void insertEnd(String t,String d,int y,double r) {
+
+        MovieNode newNode = new MovieNode(t,d,y,r);
+
+        if(head == null) {
+            head = tail = newNode;
+            return;
+        }
+
+        tail.next = newNode;
+        newNode.prev = tail;
+        tail = newNode;
+    }
+
+    void insertPosition(String t,String d,int y,double r,int pos) {
+
+        if(pos == 1) {
+            insertBeginning(t,d,y,r);
+            return;
+        }
+
+        MovieNode newNode = new MovieNode(t,d,y,r);
+        MovieNode temp = head;
+
+        for(int i=1;i<pos-1 && temp!=null;i++) {
+            temp = temp.next;
+        }
+
+        if(temp == null || temp.next == null) {
+            insertEnd(t,d,y,r);
+            return;
+        }
+
+        newNode.next = temp.next;
+        newNode.prev = temp;
+        temp.next.prev = newNode;
+        temp.next = newNode;
+    }
+
+    void deleteMovie(String title) {
+
+        MovieNode temp = head;
+
+        while(temp != null) {
+
+            if(temp.title.equals(title)) {
+
+                if(temp == head) {
+                    head = head.next;
+                    if(head != null)
+                        head.prev = null;
+                    else
+                        tail = null;
+                    return;
+                }
+
+                if(temp == tail) {
+                    tail = tail.prev;
+                    tail.next = null;
+                    return;
+                }
+
+                temp.prev.next = temp.next;
+                temp.next.prev = temp.prev;
+                return;
+            }
+
+            temp = temp.next;
+        }
+    }
+
+    void searchDirector(String director) {
+
+        MovieNode temp = head;
+
+        while(temp != null) {
+
+            if(temp.director.equals(director)) {
+                System.out.println(temp.title+" "+temp.director+" "+temp.year+" "+temp.rating);
+            }
+
+            temp = temp.next;
+        }
+    }
+
+    void searchRating(double rating) {
+
+        MovieNode temp = head;
+
+        while(temp != null) {
+
+            if(temp.rating == rating) {
+                System.out.println(temp.title+" "+temp.director+" "+temp.year+" "+temp.rating);
+            }
+
+            temp = temp.next;
+        }
+    }
+
+    void updateRating(String title,double newRating) {
+
+        MovieNode temp = head;
+
+        while(temp != null) {
+
+            if(temp.title.equals(title)) {
+                temp.rating = newRating;
+                System.out.println("Rating Updated");
+                return;
+            }
+
+            temp = temp.next;
+        }
+
+        System.out.println("Movie not found");
+    }
+
+    void displayForward() {
+
+        MovieNode temp = head;
+
+        while(temp != null) {
+            System.out.println(temp.title+" "+temp.director+" "+temp.year+" "+temp.rating);
+            temp = temp.next;
+        }
+    }
+
+    void displayReverse() {
+
+        MovieNode temp = tail;
+
+        while(temp != null) {
+            System.out.println(temp.title+" "+temp.director+" "+temp.year+" "+temp.rating);
+            temp = temp.prev;
+        }
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        MovieList list = new MovieList();
+
+        list.insertBeginning("Inception","Christopher Nolan",2010,9.0);
+        list.insertEnd("Interstellar","Christopher Nolan",2014,9.2);
+        list.insertEnd("Avatar","James Cameron",2009,8.5);
+
+        System.out.println("Forward Display");
+        list.displayForward();
+
+        System.out.println("\nReverse Display");
+        list.displayReverse();
+
+        System.out.println("\nSearch by Director");
+        list.searchDirector("Christopher Nolan");
+
+        System.out.println("\nUpdate Rating");
+        list.updateRating("Avatar",9.0);
+
+        System.out.println("\nAfter Update");
+        list.displayForward();
+
+        System.out.println("\nDelete Movie");
+        list.deleteMovie("Inception");
+
+        System.out.println("\nAfter Deletion");
+        list.displayForward();
+    }
+}
